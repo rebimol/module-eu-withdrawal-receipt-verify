@@ -1,0 +1,183 @@
+<?php
+declare(strict_types=1);
+
+/** @var \MageMe\EUWithdrawal\Block\Withdraw\VerifyResult $block */
+/** @var \Magento\Framework\Escaper $escaper */
+
+$accountUrl = $block->getMyAccountUrl();
+$ok = $block->isOk();
+?>
+<section class="mm-eu-w-verify" aria-labelledby="mm-eu-w-verify-title">
+    <header class="mm-eu-w-verify-header">
+        <h1 id="mm-eu-w-verify-title" class="mm-eu-w-verify-h1">
+            <?= $escaper->escapeHtml($ok ? __('Withdrawal receipt verified') : __('Withdrawal receipt — verification failed')) ?>
+        </h1>
+        <p class="mm-eu-w-verify-subtitle">
+            <?= $escaper->escapeHtml(__('Public integrity check — Art. 11a Directive 2011/83/EU')) ?>
+        </p>
+    </header>
+
+    <?php if ($ok): ?>
+        <!-- Hero card -->
+        <div class="mm-eu-w-verify-hero">
+            <div class="mm-eu-w-verify-badge" aria-hidden="true">
+                <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="5 12 10 17 19 8" /></svg>
+            </div>
+            <div class="mm-eu-w-verify-hero-body">
+                <h2 class="mm-eu-w-verify-hero-title"><?= $escaper->escapeHtml(__('Receipt verified')) ?></h2>
+                <p class="mm-eu-w-verify-hero-text">
+                    <?= $escaper->escapeHtml(__('This receipt is cryptographically signed and has not been modified since it was issued by the merchant.')) ?>
+                </p>
+            </div>
+            <div class="mm-eu-w-verify-hero-cta">
+                <a href="<?= $escaper->escapeUrl($accountUrl) ?>" class="action secondary mm-eu-w-verify-back">
+                    <?= $escaper->escapeHtml(__('Back to my account')) ?>
+                </a>
+            </div>
+        </div>
+
+        <!-- Receipt details -->
+        <div class="mm-eu-w-verify-card">
+            <h3 class="mm-eu-w-verify-card-title"><?= $escaper->escapeHtml(__('Receipt details')) ?></h3>
+            <dl class="mm-eu-w-verify-facts">
+                <dt><?= $escaper->escapeHtml(__('Receipt number')) ?></dt>
+                <dd>RR<?= $escaper->escapeHtml($block->getIncrementIdDisplay()) ?></dd>
+
+                <?php if ($block->getOrderNumber() !== ''): ?>
+                    <dt><?= $escaper->escapeHtml(__('Order number')) ?></dt>
+                    <dd>#<?= $escaper->escapeHtml($block->getOrderNumber()) ?></dd>
+                <?php endif; ?>
+
+                <?php if ($block->getConfirmedAtFormatted() !== ''): ?>
+                    <dt><?= $escaper->escapeHtml(__('Confirmed')) ?></dt>
+                    <dd><?= $escaper->escapeHtml($block->getConfirmedAtFormatted()) ?></dd>
+                <?php endif; ?>
+
+                <?php if ($block->getConsumerName() !== ''): ?>
+                    <dt><?= $escaper->escapeHtml(__('Consumer')) ?></dt>
+                    <dd><?= $escaper->escapeHtml($block->getConsumerName()) ?></dd>
+                <?php endif; ?>
+
+                <?php $r = $block->getRefund(); ?>
+                <dt><?= $escaper->escapeHtml(__('Refund total')) ?></dt>
+                <dd class="mm-eu-w-verify-strong"><?= $escaper->escapeHtml($block->formatAmount($r['total'])) ?></dd>
+
+                <?php if ($block->getMerchantName() !== ''): ?>
+                    <dt><?= $escaper->escapeHtml(__('Merchant')) ?></dt>
+                    <dd><?= $escaper->escapeHtml($block->getMerchantName()) ?></dd>
+                <?php endif; ?>
+
+                <?php if ($block->getArticleRef() !== ''): ?>
+                    <dt><?= $escaper->escapeHtml(__('Legal basis')) ?></dt>
+                    <dd><?= $escaper->escapeHtml($block->getArticleRef()) ?></dd>
+                <?php endif; ?>
+            </dl>
+        </div>
+
+        <?php $items = $block->getItems(); ?>
+        <?php if ($items !== []): ?>
+            <!-- Items -->
+            <div class="mm-eu-w-verify-card">
+                <h3 class="mm-eu-w-verify-card-title">
+                    <?= $escaper->escapeHtml(__('Returned items')) ?>
+                    <span class="mm-eu-w-verify-count">(<?= (int) count($items) ?>)</span>
+                </h3>
+                <ul class="mm-eu-w-verify-items">
+                    <?php foreach ($items as $item): ?>
+                        <li class="mm-eu-w-verify-item">
+                            <span class="mm-eu-w-verify-item-meta">
+                                <strong><?= $escaper->escapeHtml(__('SKU %1', (string) ($item['sku'] ?? ''))) ?></strong>
+                            </span>
+                            <span class="mm-eu-w-verify-item-qty">
+                                <?= $escaper->escapeHtml(__('Qty %1', (int) ($item['qty'] ?? 0))) ?>
+                            </span>
+                            <span class="mm-eu-w-verify-item-refund">
+                                <?= $escaper->escapeHtml($block->formatAmount((string) ($item['refund_amount'] ?? '0.00'))) ?>
+                            </span>
+                        </li>
+                    <?php endforeach; ?>
+                </ul>
+                <div class="mm-eu-w-verify-totals">
+                    <?php if ((float) $r['shipping'] > 0): ?>
+                        <div class="mm-eu-w-verify-totals-row">
+                            <span><?= $escaper->escapeHtml(__('Shipping refund')) ?></span>
+                            <span><?= $escaper->escapeHtml($block->formatAmount($r['shipping'])) ?></span>
+                        </div>
+                    <?php endif; ?>
+                    <?php if ((float) $r['tax'] > 0): ?>
+                        <div class="mm-eu-w-verify-totals-row">
+                            <span><?= $escaper->escapeHtml(__('Tax refund')) ?></span>
+                            <span><?= $escaper->escapeHtml($block->formatAmount($r['tax'])) ?></span>
+                        </div>
+                    <?php endif; ?>
+                    <div class="mm-eu-w-verify-totals-row mm-eu-w-verify-totals-grand">
+                        <span><?= $escaper->escapeHtml(__('Total refund')) ?></span>
+                        <span><?= $escaper->escapeHtml($block->formatAmount($r['total'])) ?></span>
+                    </div>
+                </div>
+            </div>
+        <?php endif; ?>
+
+        <!-- Integrity hash -->
+        <div class="mm-eu-w-verify-card mm-eu-w-verify-hash-card">
+            <div class="mm-eu-w-verify-hash-header">
+                <h3 class="mm-eu-w-verify-card-title"><?= $escaper->escapeHtml(__('Integrity hash (SHA-256)')) ?></h3>
+                <button type="button"
+                        class="mm-eu-w-verify-copy"
+                        data-copy="<?= $escaper->escapeHtmlAttr($block->getContentHash()) ?>"
+                        aria-label="<?= $escaper->escapeHtmlAttr(__('Copy hash')) ?>">
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" /><path d="M5 15V5a2 2 0 0 1 2-2h10" /></svg>
+                    <span><?= $escaper->escapeHtml(__('Copy')) ?></span>
+                </button>
+            </div>
+            <code class="mm-eu-w-verify-hash"><?= $escaper->escapeHtml($block->getContentHashDisplay()) ?></code>
+            <p class="mm-eu-w-verify-hash-help">
+                <?= $escaper->escapeHtml(__('Anyone holding the original receipt email can recompute this hash to confirm the receipt has not been altered. Mismatch means the receipt was modified after issuance.')) ?>
+            </p>
+        </div>
+
+        <p class="mm-eu-w-verify-foot-disclaimer">
+            <?= $escaper->escapeHtml(__('This page is anti-indexed (X-Robots-Tag: noindex) and rate-limited. Repeated verification attempts from the same IP are throttled.')) ?>
+        </p>
+
+        <script type="text/javascript">
+        (function () {
+            'use strict';
+            var btn = document.querySelector('.mm-eu-w-verify-copy');
+            if (!btn) { return; }
+            btn.addEventListener('click', function () {
+                var hash = btn.getAttribute('data-copy') || '';
+                if (!navigator.clipboard) { return; }
+                navigator.clipboard.writeText(hash).then(function () {
+                    var label = btn.querySelector('span');
+                    if (!label) { return; }
+                    var orig = label.textContent;
+                    label.textContent = 'Copied';
+                    btn.classList.add('is-copied');
+                    setTimeout(function () { label.textContent = orig; btn.classList.remove('is-copied'); }, 1500);
+                });
+            });
+        })();
+        </script>
+    <?php else: ?>
+        <!-- Failure state -->
+        <div class="mm-eu-w-verify-hero mm-eu-w-verify-hero--fail">
+            <div class="mm-eu-w-verify-badge mm-eu-w-verify-badge--fail" aria-hidden="true">
+                <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="6" y1="6" x2="18" y2="18" /><line x1="18" y1="6" x2="6" y2="18" /></svg>
+            </div>
+            <div class="mm-eu-w-verify-hero-body">
+                <h2 class="mm-eu-w-verify-hero-title"><?= $escaper->escapeHtml(__('Verification failed')) ?></h2>
+                <p class="mm-eu-w-verify-hero-text">
+                    <?= $escaper->escapeHtml(__(
+                        'This link does not match a valid withdrawal receipt. The link may be incorrect, the receipt may have been revoked, or the verification request was rate-limited. If you copied the link from an email, please try again in a few minutes — or contact us if the problem persists.'
+                    )) ?>
+                </p>
+            </div>
+            <div class="mm-eu-w-verify-hero-cta">
+                <a href="<?= $escaper->escapeUrl($accountUrl) ?>" class="action secondary mm-eu-w-verify-back">
+                    <?= $escaper->escapeHtml(__('Back to my account')) ?>
+                </a>
+            </div>
+        </div>
+    <?php endif; ?>
+</section>

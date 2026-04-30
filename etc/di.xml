@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <!-- Bind the Lite-side interface to the Pro implementation. -->
+    <preference for="MageMe\EUWithdrawal\Api\Receipt\ContentHasherInterface"
+                type="MageMe\EUWithdrawalReceiptVerify\Model\Receipt\ContentHasher"/>
+
+    <!-- Magento's ObjectManager auto-wires nullable typed constructor args
+         (?ContentHasherInterface $hasher = null) to NULL even when a
+         preference exists. Force injection here so the hash branch in
+         RequestFinalizer / ReceiptSendConsumer becomes active when Pro is
+         installed. Without these <argument> entries, both consumers see null
+         and Pro behaves like Lite. -->
+    <type name="MageMe\EUWithdrawal\Model\Request\RequestFinalizer">
+        <arguments>
+            <argument name="contentHasher" xsi:type="object">MageMe\EUWithdrawal\Api\Receipt\ContentHasherInterface</argument>
+        </arguments>
+    </type>
+    <type name="MageMe\EUWithdrawal\Model\Queue\ReceiptSendConsumer">
+        <arguments>
+            <argument name="hasher" xsi:type="object">MageMe\EUWithdrawal\Api\Receipt\ContentHasherInterface</argument>
+        </arguments>
+    </type>
+</config>
