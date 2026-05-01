@@ -12,6 +12,8 @@ use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\View\Result\Page;
 use Magento\Framework\View\Result\PageFactory;
+use Magento\Sales\Api\OrderRepositoryInterface;
+use Magento\Framework\Api\SearchCriteriaBuilder;
 
 class Index implements HttpGetActionInterface
 {
@@ -25,6 +27,8 @@ class Index implements HttpGetActionInterface
      * @param RateLimiter $rateLimiter
      * @param ResponseTimer $timer
      * @param AntiEnumeration $antiEnumeration
+     * @param OrderRepositoryInterface $orderRepository
+     * @param SearchCriteriaBuilder $searchCriteriaBuilder
      */
     public function __construct(
         private readonly RequestInterface $request,
@@ -34,6 +38,8 @@ class Index implements HttpGetActionInterface
         private readonly RateLimiter $rateLimiter,
         private readonly ResponseTimer $timer,
         private readonly AntiEnumeration $antiEnumeration,
+        private readonly OrderRepositoryInterface $orderRepository,
+        private readonly SearchCriteriaBuilder $searchCriteriaBuilder,
     ) {
     }
 
@@ -72,6 +78,7 @@ class Index implements HttpGetActionInterface
                             'locale'         => (string) ($dto->receipt['locale'] ?? 'en_US'),
                             'article_ref'    => (string) ($dto->legal['article_ref'] ?? ''),
                             'content_hash'   => $rawHash,
+                            'currency_code'  => $this->resolveOrderCurrency((string) ($dto->order['increment_id'] ?? '')),
                         ];
                     }
                 } catch (\Throwable) {
@@ -106,5 +113,36 @@ class Index implements HttpGetActionInterface
     {
         $remote = $this->request->getServer('REMOTE_ADDR') ?? '';
         return hash('sha256', (string) $remote);
+    }
+
+    /**
+     * Look up the order's storefront currency by increment_id. Verify-page
+     * amount formatting must use the currency the consumer was actually
+     * charged in (sales_order.order_currency_code), not the store base
+     * currency — the receipt is a customer-facing artefact, and a € invoice
+     * displayed as $ leaves the consumer unable to reconcile the figure
+     * against their bank statement.
+     *
+     * Falls back to an empty string on any lookup failure; the block then
+     * uses the store's base currency, matching the previous behaviour.
+     */
+    private function resolveOrderCurrency(string $incrementId): string
+    {
+        if ($incrementId === '') {
+            return '';
+        }
+        try {
+            $criteria = $this->searchCriteriaBuilder
+                ->addFilter('increment_id', $incrementId)
+                ->setPageSize(1)
+                ->create();
+            $list = $this->orderRepository->getList($criteria);
+            foreach ($list->getItems() as $order) {
+                return (string) $order->getOrderCurrencyCode();
+            }
+        } catch (\Throwable) {
+            // Silent — block falls through to base currency.
+        }
+        return '';
     }
 }

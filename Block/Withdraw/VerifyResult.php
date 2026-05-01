@@ -149,20 +149,42 @@ class VerifyResult extends Template
     }
 
     /**
-     * Format amount.
+     * Get currency code.
      *
-     * @param string $amount
-     * @param string $currencyCode
+     * Resolved by the controller from `sales_order.order_currency_code`
+     * (whatever the consumer was actually charged in). Falls through to the
+     * empty string when the lookup failed; in that case `formatAmount()`
+     * defers to PriceCurrency's default which uses the store's base
+     * currency.
+     *
      * @return string
      */
-    public function formatAmount(string $amount, string $currencyCode = 'EUR'): string
+    public function getCurrencyCode(): string
     {
+        return (string) ($this->getData('currency_code') ?: '');
+    }
+
+    /**
+     * Format amount.
+     *
+     * Always uses the order's currency (passed in by the controller via
+     * `setData('currency_code', ...)`) so the verify page reconciles 1:1
+     * against the receipt the consumer actually received. When unresolved,
+     * defers to the store's base currency.
+     *
+     * @param string $amount
+     * @param string $currencyCode override (optional — falls back to order currency)
+     * @return string
+     */
+    public function formatAmount(string $amount, string $currencyCode = ''): string
+    {
+        $code = $currencyCode !== '' ? $currencyCode : $this->getCurrencyCode();
         return (string) $this->priceCurrency->format(
             (float) $amount,
             false,
             PriceCurrencyInterface::DEFAULT_PRECISION,
             null,
-            $currencyCode,
+            $code !== '' ? $code : null,
         );
     }
 
