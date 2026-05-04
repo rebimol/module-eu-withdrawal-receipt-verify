@@ -53,10 +53,12 @@ $ok = $block->isOk();
                     <dd><?= $escaper->escapeHtml($block->getConfirmedAtFormatted()) ?></dd>
                 <?php endif; ?>
 
-                <?php if ($block->getConsumerName() !== ''): ?>
-                    <dt><?= $escaper->escapeHtml(__('Consumer')) ?></dt>
-                    <dd><?= $escaper->escapeHtml($block->getConsumerName()) ?></dd>
-                <?php endif; ?>
+                <?php // Consumer name intentionally not rendered — GDPR Art. 5(1)(c) data
+                      // minimisation. Verify page is publicly reachable by URL token; we
+                      // surface only data needed to confirm receipt integrity (numbers,
+                      // amounts, dates, hash) — not customer-identifying full names.
+                      // Matches the Stripe/Square/Shopify "tokenised receipt" pattern.
+                ?>
 
                 <?php $r = $block->getRefund(); ?>
                 <dt><?= $escaper->escapeHtml(__('Refund total')) ?></dt>
@@ -135,10 +137,6 @@ $ok = $block->isOk();
                 <?= $escaper->escapeHtml(__('Anyone holding the original receipt email can recompute this hash to confirm the receipt has not been altered. Mismatch means the receipt was modified after issuance.')) ?>
             </p>
         </div>
-
-        <p class="mm-eu-w-verify-foot-disclaimer">
-            <?= $escaper->escapeHtml(__('This page is anti-indexed (X-Robots-Tag: noindex) and rate-limited. Repeated verification attempts from the same IP are throttled.')) ?>
-        </p>
 
         <script type="text/javascript">
         (function () {

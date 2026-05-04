@@ -1,0 +1,306 @@
+// MageMe EU Withdrawal — public receipt verification page
+// (`/withdraw-contract/verify/index/request_id/<id>/hash/<hash>`).
+// Loaded only on the verify-index layout handle. Self-contained: design
+// tokens are copied from Lite's `_vars.less` so this Pro module stays
+// independent of Lite's frontend CSS source-tree (which is per-page-bundled
+// and has no shared @imports across modules).
+
+// ---- Design tokens (mirrored from MageMe_EUWithdrawal/css/source/_vars.less) ----
+@mm-eu-w-primary:        #2c6df5;
+@mm-eu-w-primary-dark:   #1e57d0;
+@mm-eu-w-success:        #2ea66a;
+@mm-eu-w-danger:         #c62828;
+@mm-eu-w-border:         #e4e7ec;
+@mm-eu-w-text:           #101828;
+@mm-eu-w-text-muted:     #667085;
+@mm-eu-w-bg:             #ffffff;
+@mm-eu-w-bg-subtle:      #f6f8fa;
+@mm-eu-w-info-bg:        #eff4ff;
+@mm-eu-w-info-border:    #b9cdfb;
+@mm-eu-w-success-bg:     #ecfdf3;
+@mm-eu-w-success-border: #abefc6;
+@mm-eu-w-error-bg:       #fef3f2;
+@mm-eu-w-radius:         8px;
+@mm-eu-w-radius-lg:      12px;
+@mm-eu-w-gap:            24px;
+@mm-eu-w-mobile-bp:      768px;
+@mm-eu-w-tablet-bp:      1023px;
+@mm-eu-w-font-stack:     -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', Roboto, 'Helvetica Neue', Arial, sans-serif;
+
+// ---- Verify page rules ----
+
+.column.main .mm-eu-w-verify {
+    max-width: 720px;
+    margin: 0 auto;
+    font-family: @mm-eu-w-font-stack;
+    color: @mm-eu-w-text;
+    -webkit-font-smoothing: antialiased;
+}
+
+.column.main .mm-eu-w-verify-header {
+    text-align: center;
+    margin: 0 0 28px;
+}
+.column.main .mm-eu-w-verify-h1 {
+    font-size: 26px;
+    font-weight: 700;
+    color: @mm-eu-w-text;
+    margin: 0 0 6px;
+    line-height: 1.25;
+    letter-spacing: -0.005em;
+}
+.column.main .mm-eu-w-verify-subtitle {
+    color: @mm-eu-w-text-muted;
+    font-size: 13px;
+    margin: 0;
+}
+
+// ---- Hero card ----
+.column.main .mm-eu-w-verify-hero {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    background: #eef2f7;
+    border: 1px solid #d6dde8;
+    border-radius: @mm-eu-w-radius-lg;
+    padding: 24px 28px;
+    margin: 0 0 16px;
+}
+.column.main .mm-eu-w-verify-hero--fail {
+    background: #fef3f2;
+    border-color: #f5c1c1;
+}
+.column.main .mm-eu-w-verify-badge {
+    flex-shrink: 0;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: #16a34a;
+    color: #ffffff;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+.column.main .mm-eu-w-verify-badge--fail { background: #dc2626; }
+.column.main .mm-eu-w-verify-hero-body {
+    flex: 1;
+    min-width: 0;
+}
+.column.main .mm-eu-w-verify-hero-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: @mm-eu-w-text;
+    margin: 0 0 4px;
+}
+.column.main .mm-eu-w-verify-hero-text {
+    margin: 0;
+    color: @mm-eu-w-text;
+    font-size: 14px;
+    line-height: 1.5;
+}
+.column.main .mm-eu-w-verify-hero-cta { flex-shrink: 0; }
+.column.main a.mm-eu-w-verify-back,
+.column.main .mm-eu-w-verify-back {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #1e293b;
+    background: #ffffff;
+    color: #1e293b;
+    padding: 9px 18px;
+    border-radius: @mm-eu-w-radius;
+    font-weight: 600;
+    font-size: 13px;
+    text-decoration: none;
+    line-height: 1.3;
+    white-space: nowrap;
+    transition: background 0.15s, color 0.15s;
+}
+.column.main a.mm-eu-w-verify-back:hover {
+    background: #1e293b;
+    color: #ffffff;
+    text-decoration: none;
+}
+
+// ---- Standard card ----
+.column.main .mm-eu-w-verify-card {
+    background: #ffffff;
+    border: 1px solid @mm-eu-w-border;
+    border-radius: @mm-eu-w-radius-lg;
+    padding: 22px 26px;
+    margin: 0 0 16px;
+}
+.column.main .mm-eu-w-verify-card-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: @mm-eu-w-text;
+    margin: 0 0 14px;
+    padding: 0 0 12px;
+    border-bottom: 1px solid @mm-eu-w-border;
+}
+.column.main .mm-eu-w-verify-count {
+    color: @mm-eu-w-text-muted;
+    font-weight: 400;
+    margin-left: 4px;
+}
+
+// ---- Detail facts (Receipt details) ----
+.column.main dl.mm-eu-w-verify-facts {
+    display: grid;
+    grid-template-columns: minmax(180px, 30%) 1fr;
+    gap: 8px 16px;
+    margin: 0;
+}
+.column.main dl.mm-eu-w-verify-facts dt {
+    color: @mm-eu-w-text-muted;
+    font-size: 13px;
+    font-weight: 400;
+    margin: 0;
+}
+.column.main dl.mm-eu-w-verify-facts dd {
+    color: @mm-eu-w-text;
+    font-size: 13px;
+    font-weight: 600;
+    margin: 0;
+    text-align: right;
+}
+.column.main .mm-eu-w-verify-strong {
+    font-size: 15px !important;
+    font-weight: 700 !important;
+}
+
+// ---- Items list ----
+.column.main ul.mm-eu-w-verify-items {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+.column.main .mm-eu-w-verify-item {
+    display: grid;
+    grid-template-columns: 1fr auto auto;
+    gap: 8px 18px;
+    align-items: center;
+    padding: 10px 0;
+    border-top: 1px solid @mm-eu-w-border;
+    font-size: 13px;
+}
+.column.main .mm-eu-w-verify-item:first-child { border-top: 0; padding-top: 0; }
+.column.main .mm-eu-w-verify-item-meta strong {
+    font-weight: 600;
+    color: @mm-eu-w-text;
+}
+.column.main .mm-eu-w-verify-item-qty {
+    color: @mm-eu-w-text-muted;
+}
+.column.main .mm-eu-w-verify-item-refund {
+    font-weight: 600;
+    color: @mm-eu-w-text;
+}
+
+.column.main .mm-eu-w-verify-totals {
+    margin-top: 14px;
+    padding-top: 12px;
+    border-top: 1px solid @mm-eu-w-border;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    font-size: 13px;
+}
+.column.main .mm-eu-w-verify-totals-row {
+    display: flex;
+    justify-content: space-between;
+    color: @mm-eu-w-text-muted;
+}
+.column.main .mm-eu-w-verify-totals-grand {
+    margin-top: 4px;
+    padding-top: 10px;
+    border-top: 1px solid @mm-eu-w-border;
+    font-size: 15px;
+    font-weight: 700;
+    color: @mm-eu-w-text;
+}
+
+// ---- Integrity hash ----
+.column.main .mm-eu-w-verify-hash-card {
+    background: @mm-eu-w-bg-subtle;
+}
+.column.main .mm-eu-w-verify-hash-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    border-bottom: 1px solid @mm-eu-w-border;
+    margin-bottom: 14px;
+    padding-bottom: 12px;
+}
+.column.main .mm-eu-w-verify-hash-header .mm-eu-w-verify-card-title {
+    border: 0;
+    padding: 0;
+    margin: 0;
+}
+.column.main button.mm-eu-w-verify-copy,
+.column.main .mm-eu-w-verify-copy {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: #ffffff;
+    border: 1px solid @mm-eu-w-border;
+    border-radius: @mm-eu-w-radius;
+    padding: 6px 12px;
+    font-size: 12px;
+    font-weight: 600;
+    color: @mm-eu-w-text;
+    cursor: pointer;
+    box-shadow: none;
+    line-height: 1.3;
+    transition: background 0.15s, color 0.15s, border-color 0.15s;
+}
+.column.main button.mm-eu-w-verify-copy:hover,
+.column.main .mm-eu-w-verify-copy:hover {
+    background: @mm-eu-w-bg-subtle;
+    border-color: darken(@mm-eu-w-border, 10%);
+}
+.column.main button.mm-eu-w-verify-copy.is-copied,
+.column.main .mm-eu-w-verify-copy.is-copied {
+    color: #16a34a;
+    border-color: #16a34a;
+}
+.column.main code.mm-eu-w-verify-hash {
+    display: block;
+    font-family: 'SF Mono', Menlo, Consolas, monospace;
+    font-size: 12px;
+    color: @mm-eu-w-text;
+    background: transparent;
+    padding: 0;
+    line-height: 1.6;
+    word-break: break-all;
+    white-space: pre-wrap;
+}
+.column.main .mm-eu-w-verify-hash-help {
+    margin: 12px 0 0;
+    color: @mm-eu-w-text-muted;
+    font-size: 12px;
+    line-height: 1.5;
+}
+
+.column.main .mm-eu-w-verify-foot-disclaimer {
+    margin: 18px 0 24px;
+    color: @mm-eu-w-text-muted;
+    font-size: 11px;
+    text-align: center;
+}
+
+// ---- Mobile (≤640 px) ----
+@media (max-width: 640px) {
+    .column.main .mm-eu-w-verify-hero {
+        flex-direction: column;
+        text-align: center;
+    }
+    .column.main .mm-eu-w-verify-hero-cta { width: 100%; }
+    .column.main a.mm-eu-w-verify-back { width: 100%; }
+    .column.main dl.mm-eu-w-verify-facts {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 4px;
+    }
+    .column.main dl.mm-eu-w-verify-facts dd { text-align: left; }
+}

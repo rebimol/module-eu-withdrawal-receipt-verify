@@ -4,6 +4,7 @@
       xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <head>
         <meta name="robots" content="noindex, nofollow"/>
+        <css src="MageMe_EUWithdrawalReceiptVerify::css/verify.css"/>
     </head>
     <body>
         <referenceContainer name="content">
