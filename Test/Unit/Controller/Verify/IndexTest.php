@@ -10,10 +10,12 @@ use MageMe\EUWithdrawal\Model\Receipt\ReceiptDto;
 use MageMe\EUWithdrawal\Model\Security\AntiEnumeration;
 use MageMe\EUWithdrawal\Model\Security\RateLimiter;
 use MageMe\EUWithdrawal\Model\Security\ResponseTimer;
+use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\App\Request\Http as HttpRequest;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\View\Result\Page;
 use Magento\Framework\View\Result\PageFactory;
+use Magento\Sales\Api\OrderRepositoryInterface;
 use PHPUnit\Framework\TestCase;
 
 class IndexTest extends TestCase
@@ -29,6 +31,8 @@ class IndexTest extends TestCase
             $deps->rateLimiter,
             $deps->timer,
             $deps->anti,
+            $deps->orderRepo,
+            $deps->scb,
         ))->execute();
         $this->assertSame($deps->page, $page);
         $this->assertFalse((bool) $deps->block->getData('ok'));
@@ -45,6 +49,8 @@ class IndexTest extends TestCase
             $deps->rateLimiter,
             $deps->timer,
             $deps->anti,
+            $deps->orderRepo,
+            $deps->scb,
         ))->execute();
         $this->assertFalse((bool) $deps->block->getData('ok'));
     }
@@ -60,6 +66,8 @@ class IndexTest extends TestCase
             $deps->rateLimiter,
             $deps->timer,
             $deps->anti,
+            $deps->orderRepo,
+            $deps->scb,
         ))->execute();
         $this->assertFalse((bool) $deps->block->getData('ok'));
     }
@@ -79,6 +87,8 @@ class IndexTest extends TestCase
             $deps->rateLimiter,
             $deps->timer,
             $deps->anti,
+            $deps->orderRepo,
+            $deps->scb,
         ))->execute();
         $this->assertTrue((bool) $deps->block->getData('ok'));
     }
@@ -96,6 +106,8 @@ class IndexTest extends TestCase
             $deps->rateLimiter,
             $deps->timer,
             $deps->anti,
+            $deps->orderRepo,
+            $deps->scb,
         ))->execute();
         $this->assertFalse((bool) $deps->block->getData('ok'));
     }
@@ -140,6 +152,8 @@ class IndexTest extends TestCase
         $d->rateLimiter->method('allow')->willReturn($allowRate);
         $d->timer = $this->createMock(ResponseTimer::class);
         $d->anti  = $this->createMock(AntiEnumeration::class);
+        $d->orderRepo = $this->createMock(OrderRepositoryInterface::class);
+        $d->scb = $this->createMock(SearchCriteriaBuilder::class);
         return $d;
     }
 
