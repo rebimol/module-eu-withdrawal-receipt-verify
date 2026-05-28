@@ -8,18 +8,20 @@ use MageMe\EUWithdrawal\Model\Receipt\ReceiptBuilder;
 use MageMe\EUWithdrawal\Model\Security\AntiEnumeration;
 use MageMe\EUWithdrawal\Model\Security\RateLimiter;
 use MageMe\EUWithdrawal\Model\Security\ResponseTimer;
-use Magento\Framework\App\Action\HttpGetActionInterface;
+use MageMe\Core\Controller\AbstractStorefrontGetPage;
+use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\View\Result\Page;
 use Magento\Framework\View\Result\PageFactory;
 use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 
-class Index implements HttpGetActionInterface
+class Index extends AbstractStorefrontGetPage
 {
     /**
      * Constructor.
      *
+     * @param Context $context
      * @param RequestInterface $request
      * @param PageFactory $pageFactory
      * @param ReceiptBuilder $builder
@@ -31,6 +33,7 @@ class Index implements HttpGetActionInterface
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      */
     public function __construct(
+        Context $context,
         private readonly RequestInterface $request,
         private readonly PageFactory $pageFactory,
         private readonly ReceiptBuilder $builder,
@@ -41,6 +44,7 @@ class Index implements HttpGetActionInterface
         private readonly OrderRepositoryInterface $orderRepository,
         private readonly SearchCriteriaBuilder $searchCriteriaBuilder,
     ) {
+        parent::__construct($context);
     }
 
     /**
