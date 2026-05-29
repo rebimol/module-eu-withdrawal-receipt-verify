@@ -77,6 +77,32 @@ class ReceiptCanonicalizerTest extends TestCase
         $this->assertStringNotContainsString('\\/', $out);
     }
 
+    public function testSnapshotRoundTripIsHashStable(): void
+    {
+        $original = $this->makeDto(['name' => 'Müller & 文字', 'email' => 'x@y']);
+
+        // Mirror RequestFinalizer (store toArray() as JSON) + ReceiptBuilder::fromSnapshot
+        // (decode JSON, rebuild DTO). The canonical bytes must be byte-identical, so the
+        // stored content_hash still verifies after the snapshot replaces live config/order.
+        $json = json_encode(
+            $original->toArray(),
+            JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_THROW_ON_ERROR,
+        );
+        $d = json_decode($json, true);
+        $rebuilt = new ReceiptDto(
+            requestId: $original->requestId,
+            consumer: $d[ReceiptDto::CONSUMER],
+            order: $d[ReceiptDto::ORDER],
+            items: $d[ReceiptDto::ITEMS],
+            refund: $d[ReceiptDto::REFUND],
+            receipt: $d[ReceiptDto::RECEIPT],
+            merchant: $d[ReceiptDto::MERCHANT],
+            legal: $d[ReceiptDto::LEGAL],
+        );
+
+        $this->assertSame($this->c->canonicalize($original), $this->c->canonicalize($rebuilt));
+    }
+
     private function makeDto(array $consumer, string $refundTotal = '10.00'): ReceiptDto
     {
         return new ReceiptDto(

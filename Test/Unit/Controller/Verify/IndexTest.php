@@ -11,8 +11,8 @@ use MageMe\EUWithdrawal\Model\Security\AntiEnumeration;
 use MageMe\EUWithdrawal\Model\Security\RateLimiter;
 use MageMe\EUWithdrawal\Model\Security\ResponseTimer;
 use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\Request\Http as HttpRequest;
-use Magento\Framework\App\RequestInterface;
 use Magento\Framework\View\Result\Page;
 use Magento\Framework\View\Result\PageFactory;
 use Magento\Sales\Api\OrderRepositoryInterface;
@@ -24,6 +24,7 @@ class IndexTest extends TestCase
     {
         $deps = $this->deps(['request_id' => 'abc', 'hash' => str_repeat('a', 64)]);
         $page = (new Index(
+            $deps->context,
             $deps->request,
             $deps->pageFactory,
             $deps->builder,
@@ -42,6 +43,7 @@ class IndexTest extends TestCase
     {
         $deps = $this->deps(['request_id' => '42', 'hash' => 'short']);
         (new Index(
+            $deps->context,
             $deps->request,
             $deps->pageFactory,
             $deps->builder,
@@ -59,6 +61,7 @@ class IndexTest extends TestCase
     {
         $deps = $this->deps(['request_id' => '42', 'hash' => str_repeat('a', 64)], allowRate: false);
         (new Index(
+            $deps->context,
             $deps->request,
             $deps->pageFactory,
             $deps->builder,
@@ -80,6 +83,7 @@ class IndexTest extends TestCase
         $deps->hasher->method('hash')->willReturn($hash);
 
         (new Index(
+            $deps->context,
             $deps->request,
             $deps->pageFactory,
             $deps->builder,
@@ -99,6 +103,7 @@ class IndexTest extends TestCase
         $deps->builder->method('build')->willReturn($this->dto());
         $deps->hasher->method('hash')->willReturn(str_repeat('b', 64));
         (new Index(
+            $deps->context,
             $deps->request,
             $deps->pageFactory,
             $deps->builder,
@@ -115,6 +120,7 @@ class IndexTest extends TestCase
     private function deps(array $params, bool $allowRate = true): object
     {
         $d = new \stdClass();
+        $d->context = $this->createMock(Context::class);
         $d->request = $this->createMock(HttpRequest::class);
         $d->request->method('getParam')->willReturnCallback(fn($k, $default = null) => $params[$k] ?? $default);
         $d->request->method('getServer')->willReturn('127.0.0.1');
