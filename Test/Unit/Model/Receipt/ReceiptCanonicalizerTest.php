@@ -81,7 +81,7 @@ class ReceiptCanonicalizerTest extends TestCase
     {
         $original = $this->makeDto(['name' => 'Müller & 文字', 'email' => 'x@y']);
 
-        // Mirror RequestFinalizer (store toArray() as JSON) + ReceiptBuilder::fromSnapshot
+        // Mirror RequestCreator (store toArray() as JSON) + ReceiptBuilder::fromSnapshot
         // (decode JSON, rebuild DTO). The canonical bytes must be byte-identical, so the
         // stored content_hash still verifies after the snapshot replaces live config/order.
         $json = json_encode(

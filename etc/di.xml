@@ -8,10 +8,10 @@
     <!-- Magento's ObjectManager auto-wires nullable typed constructor args
          (?ContentHasherInterface $hasher = null) to NULL even when a
          preference exists. Force injection here so the hash branch in
-         RequestFinalizer / ReceiptSendConsumer becomes active when Pro is
+         RequestCreator / ReceiptSendConsumer becomes active when Pro is
          installed. Without these <argument> entries, both consumers see null
          and Pro behaves like Free. -->
-    <type name="MageMe\EUWithdrawal\Model\Request\RequestFinalizer">
+    <type name="MageMe\EUWithdrawal\Model\Request\RequestCreator">
         <arguments>
             <argument name="contentHasher" xsi:type="object">MageMe\EUWithdrawal\Api\Receipt\ContentHasherInterface</argument>
         </arguments>
