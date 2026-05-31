@@ -1,7 +1,7 @@
 {
   "name": "mageme/module-eu-withdrawal-receipt-verify",
   "description": "SHA-256 content hash + public verify URL endpoint for receipt tamper-evidence. Pro tier add-on for mageme/module-eu-withdrawal. NOT legal advice — see README disclaimer; merchant is responsible for evaluating evidentiary fit per jurisdiction.",
-  "version": "0.1.2",
+  "version": "1.0.0",
   "type": "magento2-module",
   "license": "proprietary",
   "keywords": [
@@ -24,7 +24,7 @@
   ],
   "require": {
     "php": "~8.1.0||~8.2.0||~8.3.0||~8.4.0",
-    "mageme/module-eu-withdrawal": ">=0.9 <1.0",
+    "mageme/module-eu-withdrawal": "^1.0",
     "magento/framework": "^103.0",
     "ext-intl": "*"
   },
