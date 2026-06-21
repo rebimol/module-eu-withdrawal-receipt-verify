@@ -9,7 +9,6 @@ namespace MageMe\EUWithdrawalReceiptVerify\Controller\Verify;
 
 use MageMe\EUWithdrawal\Api\Receipt\ContentHasherInterface;
 use MageMe\EUWithdrawal\Model\Receipt\ReceiptBuilder;
-use MageMe\EUWithdrawal\Model\Security\AntiEnumeration;
 use MageMe\EUWithdrawal\Model\Security\RateLimiter;
 use MageMe\EUWithdrawal\Model\Security\ResponseTimer;
 use MageMe\Core\Controller\AbstractStorefrontGetPage;
@@ -32,7 +31,6 @@ class Index extends AbstractStorefrontGetPage
      * @param ContentHasherInterface $hasher
      * @param RateLimiter $rateLimiter
      * @param ResponseTimer $timer
-     * @param AntiEnumeration $antiEnumeration
      * @param OrderRepositoryInterface $orderRepository
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      */
@@ -44,7 +42,6 @@ class Index extends AbstractStorefrontGetPage
         private readonly ContentHasherInterface $hasher,
         private readonly RateLimiter $rateLimiter,
         private readonly ResponseTimer $timer,
-        private readonly AntiEnumeration $antiEnumeration,
         private readonly OrderRepositoryInterface $orderRepository,
         private readonly SearchCriteriaBuilder $searchCriteriaBuilder,
     ) {

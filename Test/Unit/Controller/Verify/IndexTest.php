@@ -11,7 +11,6 @@ use MageMe\EUWithdrawalReceiptVerify\Controller\Verify\Index;
 use MageMe\EUWithdrawalReceiptVerify\Model\Receipt\ContentHasher;
 use MageMe\EUWithdrawal\Model\Receipt\ReceiptBuilder;
 use MageMe\EUWithdrawal\Model\Receipt\ReceiptDto;
-use MageMe\EUWithdrawal\Model\Security\AntiEnumeration;
 use MageMe\EUWithdrawal\Model\Security\RateLimiter;
 use MageMe\EUWithdrawal\Model\Security\ResponseTimer;
 use Magento\Framework\Api\SearchCriteriaBuilder;
@@ -35,7 +34,6 @@ class IndexTest extends TestCase
             $deps->hasher,
             $deps->rateLimiter,
             $deps->timer,
-            $deps->anti,
             $deps->orderRepo,
             $deps->scb,
         ))->execute();
@@ -54,7 +52,6 @@ class IndexTest extends TestCase
             $deps->hasher,
             $deps->rateLimiter,
             $deps->timer,
-            $deps->anti,
             $deps->orderRepo,
             $deps->scb,
         ))->execute();
@@ -72,7 +69,6 @@ class IndexTest extends TestCase
             $deps->hasher,
             $deps->rateLimiter,
             $deps->timer,
-            $deps->anti,
             $deps->orderRepo,
             $deps->scb,
         ))->execute();
@@ -94,7 +90,6 @@ class IndexTest extends TestCase
             $deps->hasher,
             $deps->rateLimiter,
             $deps->timer,
-            $deps->anti,
             $deps->orderRepo,
             $deps->scb,
         ))->execute();
@@ -114,7 +109,6 @@ class IndexTest extends TestCase
             $deps->hasher,
             $deps->rateLimiter,
             $deps->timer,
-            $deps->anti,
             $deps->orderRepo,
             $deps->scb,
         ))->execute();
@@ -161,7 +155,6 @@ class IndexTest extends TestCase
         $d->rateLimiter = $this->createMock(RateLimiter::class);
         $d->rateLimiter->method('allow')->willReturn($allowRate);
         $d->timer = $this->createMock(ResponseTimer::class);
-        $d->anti  = $this->createMock(AntiEnumeration::class);
         $d->orderRepo = $this->createMock(OrderRepositoryInterface::class);
         $d->scb = $this->createMock(SearchCriteriaBuilder::class);
         return $d;
