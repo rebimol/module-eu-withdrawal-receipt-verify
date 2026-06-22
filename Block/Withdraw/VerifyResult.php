@@ -109,10 +109,10 @@ class VerifyResult extends Template
         return (string) $this->getData('content_hash');
     }
 
-    /** Formats the ReceiptDto's ISO confirmed_at ("2026-04-24T11:03:22Z") in the store timezone. */
-    public function getConfirmedAtFormatted(): string
+    /** Formats the ReceiptDto's ISO created_at ("2026-04-24T11:03:22Z") in the store timezone. */
+    public function getCreatedAtFormatted(): string
     {
-        $raw = (string) $this->getData('confirmed_at');
+        $raw = (string) $this->getData('created_at');
         if ($raw === '') {
             return '';
         }

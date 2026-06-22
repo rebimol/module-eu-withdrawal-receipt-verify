@@ -52,9 +52,9 @@ $ok = $block->isOk();
                     <dd>#<?= $escaper->escapeHtml($block->getOrderNumber()) ?></dd>
                 <?php endif; ?>
 
-                <?php if ($block->getConfirmedAtFormatted() !== ''): ?>
-                    <dt><?= $escaper->escapeHtml(__('Confirmed')) ?></dt>
-                    <dd><?= $escaper->escapeHtml($block->getConfirmedAtFormatted()) ?></dd>
+                <?php if ($block->getCreatedAtFormatted() !== ''): ?>
+                    <dt><?= $escaper->escapeHtml(__('Submitted')) ?></dt>
+                    <dd><?= $escaper->escapeHtml($block->getCreatedAtFormatted()) ?></dd>
                 <?php endif; ?>
 
                 <?php // Consumer name intentionally not rendered — GDPR Art. 5(1)(c) data

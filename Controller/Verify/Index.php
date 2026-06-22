@@ -74,7 +74,7 @@ class Index extends AbstractStorefrontGetPage
                         $ok = true;
                         $payload = [
                             'request_id'     => $dto->requestId,
-                            'confirmed_at'   => (string) ($dto->receipt['confirmed_at'] ?? ''),
+                            'created_at'     => (string) ($dto->receipt['created_at'] ?? ''),
                             'order_number'   => (string) ($dto->order['increment_id'] ?? ''),
                             'consumer_name'  => (string) ($dto->consumer['name'] ?? ''),
                             'items'          => $dto->items,
