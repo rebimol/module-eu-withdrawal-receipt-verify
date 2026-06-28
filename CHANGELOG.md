@@ -1,3 +1,7 @@
+## 1.0.2
+
+* Other: The verification page now shows the receipt's creation date.
+
 ## 1.0.1
 
 * Other: Internal cleanup of the verify page's copy-to-clipboard script.
