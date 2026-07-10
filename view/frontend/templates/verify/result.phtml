@@ -112,7 +112,7 @@ $ok = $block->isOk();
                     <?php endif; ?>
                     <?php if ((float) $r['tax'] > 0): ?>
                         <div class="mm-eu-w-verify-totals-row">
-                            <span><?= $escaper->escapeHtml(__('Tax refund')) ?></span>
+                            <span><?= $escaper->escapeHtml(__('Of which VAT')) ?></span>
                             <span><?= $escaper->escapeHtml($block->formatAmount($r['tax'])) ?></span>
                         </div>
                     <?php endif; ?>
