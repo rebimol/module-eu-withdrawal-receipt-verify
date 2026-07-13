@@ -14,3 +14,4 @@
 "Verify this receipt","Verificér denne kvittering"
 "Integrity hash","Integritetshash"
 "This SHA-256 hash uniquely identifies your withdrawal record. Verify it at any time using the button above.","Denne SHA-256-hash identificerer din fortrydelsesregistrering entydigt. Du kan til enhver tid verificere den med knappen ovenfor."
+"Anyone holding the original receipt email can recompute this hash to confirm the receipt has not been altered. Mismatch means the receipt was modified after issuance. Click the hash to select it, then copy with Ctrl+C / ⌘+C.","Enhver, der har den oprindelige kvitterings-e-mail, kan genberegne dette hash for at bekræfte, at kvitteringen ikke er blevet ændret. Uoverensstemmelse betyder, at kvitteringen er ændret efter udstedelsen. Klik på hashen for at markere den, og kopiér derefter med Ctrl+C / ⌘+C."

@@ -1,3 +1,7 @@
+## 1.0.3
+
+- Fix: The hash explanation on the receipt verification page now appears in all supported languages.
+
 ## 1.0.2
 
 * Other: The verification page now shows the receipt's creation date.

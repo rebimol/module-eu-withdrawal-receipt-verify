@@ -14,3 +14,4 @@
 "Verify this receipt","Provjeri ovu potvrdu"
 "Integrity hash","Hash integriteta"
 "This SHA-256 hash uniquely identifies your withdrawal record. Verify it at any time using the button above.","Ovaj SHA-256 hash jedinstveno identificira zapis tvog odustanka. Možeš ga provjeriti u bilo kojem trenutku gumbom iznad."
+"Anyone holding the original receipt email can recompute this hash to confirm the receipt has not been altered. Mismatch means the receipt was modified after issuance. Click the hash to select it, then copy with Ctrl+C / ⌘+C.","Svatko tko posjeduje izvornu e-poruku s potvrdom može ponovno izračunati ovaj hash kako bi potvrdio da potvrda nije izmijenjena. Nepodudarnost znači da je potvrda izmijenjena nakon izdavanja. Kliknite na hash da biste ga odabrali, a zatim kopirajte s Ctrl+C / ⌘+C."

@@ -14,3 +14,4 @@
 "Verify this receipt","Провери това потвърждение"
 "Integrity hash","Хеш за цялост"
 "This SHA-256 hash uniquely identifies your withdrawal record. Verify it at any time using the button above.","Този SHA-256 хеш идентифицира уникално записа за отказа ти. Можеш да го провериш по всяко време чрез бутона по-горе."
+"Anyone holding the original receipt email can recompute this hash to confirm the receipt has not been altered. Mismatch means the receipt was modified after issuance. Click the hash to select it, then copy with Ctrl+C / ⌘+C.","Всеки, който разполага с оригиналното имейл удостоверение, може да преизчисли този хеш, за да потвърди, че удостоверението не е променяно. Несъответствие означава, че удостоверението е било променено след издаването му. Кликнете върху хеша, за да го изберете, след което копирайте с Ctrl+C / ⌘+C."

@@ -14,3 +14,4 @@
 "Verify this receipt","Vérifier ce reçu"
 "Integrity hash","Empreinte d'intégrité"
 "This SHA-256 hash uniquely identifies your withdrawal record. Verify it at any time using the button above.","Cette empreinte SHA-256 identifie votre rétractation de manière unique. Vous pouvez la vérifier à tout moment via le bouton ci-dessus."
+"Anyone holding the original receipt email can recompute this hash to confirm the receipt has not been altered. Mismatch means the receipt was modified after issuance. Click the hash to select it, then copy with Ctrl+C / ⌘+C.","Toute personne disposant de l'e-mail de reçu original peut recalculer cette empreinte pour confirmer que le reçu n'a pas été altéré. Une non-correspondance signifie que le reçu a été modifié après son émission. Cliquez sur l’empreinte pour la sélectionner, puis copiez-la avec Ctrl+C / ⌘+C."

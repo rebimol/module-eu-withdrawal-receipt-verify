@@ -14,3 +14,4 @@
 "Verify this receipt","Pārbaudīt šo apliecinājumu"
 "Integrity hash","Integritātes jaucējkods"
 "This SHA-256 hash uniquely identifies your withdrawal record. Verify it at any time using the button above.","Šis SHA-256 jaucējkods unikāli identificē tava atteikuma ierakstu. Vari to pārbaudīt jebkurā laikā, izmantojot pogu augšpusē."
+"Anyone holding the original receipt email can recompute this hash to confirm the receipt has not been altered. Mismatch means the receipt was modified after issuance. Click the hash to select it, then copy with Ctrl+C / ⌘+C.","Ikviens, kuram ir oriģinālais kvīts e-pasts, var pārrēķināt šo jaucējkodu, lai apstiprinātu, ka kvīts nav mainīta. Neatbilstība nozīmē, ka kvīts pēc izsniegšanas tika mainīta. Noklikšķiniet uz jaucējkoda, lai to atlasītu, pēc tam kopējiet ar Ctrl+C / ⌘+C."

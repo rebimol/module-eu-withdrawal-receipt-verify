@@ -14,3 +14,4 @@
 "Verify this receipt","Verificar este comprovativo"
 "Integrity hash","Hash de integridade"
 "This SHA-256 hash uniquely identifies your withdrawal record. Verify it at any time using the button above.","Este hash SHA-256 identifica de forma única o seu registo de livre resolução. Pode verificá-lo a qualquer momento utilizando o botão acima."
+"Anyone holding the original receipt email can recompute this hash to confirm the receipt has not been altered. Mismatch means the receipt was modified after issuance. Click the hash to select it, then copy with Ctrl+C / ⌘+C.","Qualquer pessoa que possua o e-mail original do comprovativo pode recalcular este hash para confirmar que o comprovativo não foi alterado. Uma discrepância significa que o comprovativo foi modificado após a emissão. Clique no hash para o selecionar e, em seguida, copie com Ctrl+C / ⌘+C."

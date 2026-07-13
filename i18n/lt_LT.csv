@@ -14,3 +14,4 @@
 "Verify this receipt","Patikrinti šį patvirtinimą"
 "Integrity hash","Vientisumo maišos kodas"
 "This SHA-256 hash uniquely identifies your withdrawal record. Verify it at any time using the button above.","Šis SHA-256 maišos kodas unikaliai identifikuoja tavo atsisakymo įrašą. Bet kada gali jį patikrinti naudodamas mygtuką viršuje."
+"Anyone holding the original receipt email can recompute this hash to confirm the receipt has not been altered. Mismatch means the receipt was modified after issuance. Click the hash to select it, then copy with Ctrl+C / ⌘+C.","Bet kas, turintis pradinį kvito el. laišką, gali iš naujo apskaičiuoti šį maišos kodą, kad patvirtintų, jog kvitas nebuvo pakeistas. Neatitikimas reiškia, kad kvitas buvo pakeistas po jo išdavimo. Spustelėkite maišos kodą, kad jį pažymėtumėte, tada nukopijuokite Ctrl+C / ⌘+C."

@@ -14,3 +14,4 @@
 "Verify this receipt","Ověřit toto potvrzení"
 "Integrity hash","Kontrolní hash"
 "This SHA-256 hash uniquely identifies your withdrawal record. Verify it at any time using the button above.","Tento SHA-256 hash jednoznačně identifikuje tvůj záznam o odstoupení. Můžeš jej kdykoli ověřit pomocí tlačítka výše."
+"Anyone holding the original receipt email can recompute this hash to confirm the receipt has not been altered. Mismatch means the receipt was modified after issuance. Click the hash to select it, then copy with Ctrl+C / ⌘+C.","Kdokoli, kdo má původní e-mail s dokladem, může přepočítat tento hash a ověřit, že doklad nebyl změněn. Neshoda znamená, že doklad byl po vystavení upraven. Kliknutím na hash jej vyberte a poté zkopírujte pomocí Ctrl+C / ⌘+C."

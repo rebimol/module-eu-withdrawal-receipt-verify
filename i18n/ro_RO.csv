@@ -14,3 +14,4 @@
 "Verify this receipt","Verifică această confirmare"
 "Integrity hash","Hash de integritate"
 "This SHA-256 hash uniquely identifies your withdrawal record. Verify it at any time using the button above.","Acest hash SHA-256 identifică în mod unic înregistrarea ta de retragere. O poți verifica oricând folosind butonul de mai sus."
+"Anyone holding the original receipt email can recompute this hash to confirm the receipt has not been altered. Mismatch means the receipt was modified after issuance. Click the hash to select it, then copy with Ctrl+C / ⌘+C.","Oricine deține e-mailul original al bonului poate recalcula acest hash pentru a confirma că bonul nu a fost modificat. O neconcordanță înseamnă că bonul a fost modificat după emitere. Faceți clic pe hash pentru a-l selecta, apoi copiați cu Ctrl+C / ⌘+C."

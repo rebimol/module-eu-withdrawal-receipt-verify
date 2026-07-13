@@ -14,3 +14,4 @@
 "Verify this receipt","Zweryfikuj to potwierdzenie"
 "Integrity hash","Hasz integralności"
 "This SHA-256 hash uniquely identifies your withdrawal record. Verify it at any time using the button above.","Ten hasz SHA-256 jednoznacznie identyfikuje Twój zapis odstąpienia. Możesz go w każdej chwili zweryfikować, używając przycisku powyżej."
+"Anyone holding the original receipt email can recompute this hash to confirm the receipt has not been altered. Mismatch means the receipt was modified after issuance. Click the hash to select it, then copy with Ctrl+C / ⌘+C.","Każdy, kto posiada oryginalną wiadomość e-mail z potwierdzeniem, może ponownie obliczyć ten skrót, aby potwierdzić, że potwierdzenie nie zostało zmienione. Niezgodność oznacza, że potwierdzenie zostało zmodyfikowane po jego wystawieniu. Kliknij skrót, aby go zaznaczyć, a następnie skopiuj za pomocą Ctrl+C / ⌘+C."

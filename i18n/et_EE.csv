@@ -14,3 +14,4 @@
 "Verify this receipt","Kontrolli seda tõendit"
 "Integrity hash","Terviklikkuse räsi"
 "This SHA-256 hash uniquely identifies your withdrawal record. Verify it at any time using the button above.","See SHA-256 räsi tuvastab unikaalselt sinu taganemiskirje. Saad seda igal ajal kontrollida ülaltoodud nupu abil."
+"Anyone holding the original receipt email can recompute this hash to confirm the receipt has not been altered. Mismatch means the receipt was modified after issuance. Click the hash to select it, then copy with Ctrl+C / ⌘+C.","Igaüks, kellel on algne kviitungi e-kiri, saab selle räsi uuesti arvutada, et kinnitada, et kviitungit ei ole muudetud. Mittevastavus tähendab, et kviitungit on pärast väljastamist muudetud. Klõpsake räsil selle valimiseks ja seejärel kopeerige klahvidega Ctrl+C / ⌘+C."

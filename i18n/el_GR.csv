@@ -14,3 +14,4 @@
 "Verify this receipt","Επαλήθευση αυτής της απόδειξης"
 "Integrity hash","Hash ακεραιότητας"
 "This SHA-256 hash uniquely identifies your withdrawal record. Verify it at any time using the button above.","Αυτό το hash SHA-256 ταυτοποιεί μοναδικά την εγγραφή υπαναχώρησής σας. Μπορείτε να το επαληθεύσετε ανά πάσα στιγμή με το παραπάνω κουμπί."
+"Anyone holding the original receipt email can recompute this hash to confirm the receipt has not been altered. Mismatch means the receipt was modified after issuance. Click the hash to select it, then copy with Ctrl+C / ⌘+C.","Όποιος διαθέτει το αρχικό email απόδειξης μπορεί να υπολογίσει εκ νέου αυτόν τον κατακερματισμό για να επιβεβαιώσει ότι η απόδειξη δεν έχει τροποποιηθεί. Αναντιστοιχία σημαίνει ότι η απόδειξη τροποποιήθηκε μετά την έκδοση. Κάντε κλικ στον κατακερματισμό για να τον επιλέξετε και, στη συνέχεια, αντιγράψτε με Ctrl+C / ⌘+C."

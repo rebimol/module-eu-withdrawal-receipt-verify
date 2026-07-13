@@ -14,3 +14,4 @@
 "Verify this receipt","Diesen Beleg verifizieren"
 "Integrity hash","Integritätshash"
 "This SHA-256 hash uniquely identifies your withdrawal record. Verify it at any time using the button above.","Dieser SHA-256-Hash identifiziert Ihren Widerruf eindeutig. Sie können ihn jederzeit über die Schaltfläche oben überprüfen."
+"Anyone holding the original receipt email can recompute this hash to confirm the receipt has not been altered. Mismatch means the receipt was modified after issuance. Click the hash to select it, then copy with Ctrl+C / ⌘+C.","Jeder, der die ursprüngliche Beleg-E-Mail besitzt, kann diesen Hash neu berechnen, um zu bestätigen, dass der Beleg nicht verändert wurde. Eine Abweichung bedeutet, dass der Beleg nach der Ausstellung geändert wurde. Klicken Sie auf den Hash, um ihn auszuwählen, und kopieren Sie ihn dann mit Strg+C / ⌘+C."
