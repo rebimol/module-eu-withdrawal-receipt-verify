@@ -1,6 +1,7 @@
 ## 1.0.3
 
 - Fix: The hash explanation on the receipt verification page now appears in all supported languages.
+* Other: The tax row on the receipt-verification page is now labelled "Of which VAT", matching the withdrawal form.
 
 ## 1.0.2
 
