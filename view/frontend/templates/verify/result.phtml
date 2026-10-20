@@ -145,7 +145,7 @@ $ok = $block->isOk();
             </div>
             <code class="mm-eu-w-verify-hash"><?= $escaper->escapeHtml($block->getContentHashDisplay()) ?></code>
             <p class="mm-eu-w-verify-hash-help">
-                <?= $escaper->escapeHtml(__('Anyone holding the original receipt email can recompute this hash to confirm the receipt has not been altered. Mismatch means the receipt was modified after issuance.')) ?>
+                <?= $escaper->escapeHtml(__('The store keeps this hash with the receipt and compares it with the content of the receipt during this check. A mismatch would mean the receipt was changed after it was issued.')) ?>
             </p>
         </div>
 
