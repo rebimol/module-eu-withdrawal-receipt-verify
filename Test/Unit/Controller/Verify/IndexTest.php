@@ -18,6 +18,9 @@ use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\Request\Http as HttpRequest;
 use Magento\Framework\View\Result\Page;
 use Magento\Framework\View\Result\PageFactory;
+use Magento\Framework\Api\SearchCriteria;
+use Magento\Sales\Api\Data\OrderInterface;
+use Magento\Sales\Api\Data\OrderSearchResultInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
 use PHPUnit\Framework\TestCase;
 
@@ -94,6 +97,37 @@ class IndexTest extends TestCase
             $deps->scb,
         ))->execute();
         $this->assertTrue((bool) $deps->block->getData('ok'));
+    }
+
+    public function testVerifiedPageGetsTheOrderCurrencyAndStore(): void
+    {
+        $hash = str_repeat('a', 64);
+        $deps = $this->deps(['request_id' => '42', 'hash' => $hash]);
+        $deps->builder->method('build')->willReturn($this->dto());
+        $deps->hasher->method('hash')->willReturn($hash);
+        $order = $this->createMock(OrderInterface::class);
+        $order->method('getOrderCurrencyCode')->willReturn('EUR');
+        $order->method('getStoreId')->willReturn(3);
+        $list = $this->createMock(OrderSearchResultInterface::class);
+        $list->method('getItems')->willReturn([$order]);
+        $deps->orderRepo->method('getList')->willReturn($list);
+        $deps->scb->method('addFilter')->willReturnSelf();
+        $deps->scb->method('setPageSize')->willReturnSelf();
+        $deps->scb->method('create')->willReturn($this->createMock(SearchCriteria::class));
+
+        (new Index(
+            $deps->context,
+            $deps->request,
+            $deps->pageFactory,
+            $deps->builder,
+            $deps->hasher,
+            $deps->rateLimiter,
+            $deps->timer,
+            $deps->orderRepo,
+            $deps->scb,
+        ))->execute();
+        $this->assertSame('EUR', $deps->block->getData('currency_code'));
+        $this->assertSame(3, $deps->block->getData('store_id'));
     }
 
     public function testMismatchHashReturnsUniformFail(): void

@@ -1,7 +1,6 @@
 ## 1.0.4
 
-- Fix: The receipt verification page shows the submission time in the store's time zone and names the zone; it used to show UTC without saying so.
-- Fix: The verification page shows the legal basis the receipt email states (Art. 11a Directive 2011/83/EU), also for receipts issued earlier.
+- Fix: The receipt verification page shows the submission time in the time zone of the store the order was placed in and names the zone; it used to show UTC without saying so.
 - Fix: Returned items on the verification page show the product name next to the SKU, for receipts issued with EU Withdrawal 1.2.0 or later.
 - Fix: Visitors who are not signed in get a "Continue Shopping" link on the verification page instead of "Back to my account".
 

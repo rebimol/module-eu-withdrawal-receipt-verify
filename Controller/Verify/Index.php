@@ -16,6 +16,7 @@ use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\View\Result\Page;
 use Magento\Framework\View\Result\PageFactory;
+use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 
@@ -72,6 +73,7 @@ class Index extends AbstractStorefrontGetPage
                     $computed = $this->hasher->hash($dto);
                     if (hash_equals($computed, $rawHash)) {
                         $ok = true;
+                        $order = $this->resolveOrder((string) ($dto->order['increment_id'] ?? ''));
                         $payload = [
                             'request_id'     => $dto->requestId,
                             'created_at'     => (string) ($dto->receipt['created_at'] ?? ''),
@@ -83,7 +85,8 @@ class Index extends AbstractStorefrontGetPage
                             'locale'         => (string) ($dto->receipt['locale'] ?? 'en_US'),
                             'article_ref'    => (string) ($dto->legal['article_ref'] ?? ''),
                             'content_hash'   => $rawHash,
-                            'currency_code'  => $this->resolveOrderCurrency((string) ($dto->order['increment_id'] ?? '')),
+                            'currency_code'  => $order !== null ? (string) $order->getOrderCurrencyCode() : '',
+                            'store_id'       => $order !== null ? (int) $order->getStoreId() : 0,
                         ];
                     }
                 } catch (\Throwable) {
@@ -121,20 +124,20 @@ class Index extends AbstractStorefrontGetPage
     }
 
     /**
-     * Look up the order's storefront currency by increment_id. Verify-page
-     * amount formatting must use the currency the consumer was actually
-     * charged in (sales_order.order_currency_code), not the store base
-     * currency — the receipt is a customer-facing artefact, and a € invoice
-     * displayed as $ leaves the consumer unable to reconcile the figure
-     * against their bank statement.
+     * Look up the order by increment_id. Verify-page amount formatting must use
+     * the currency the consumer was actually charged in
+     * (sales_order.order_currency_code), not the store base currency — the
+     * receipt is a customer-facing artefact, and a € invoice displayed as $
+     * leaves the consumer unable to reconcile the figure against their bank
+     * statement. The order's store also sets the timezone of the submission time.
      *
-     * Falls back to an empty string on any lookup failure; the block then
-     * uses the store's base currency, matching the previous behaviour.
+     * Returns null on any lookup failure; the block then uses the store's base
+     * currency and the current store's timezone.
      */
-    private function resolveOrderCurrency(string $incrementId): string
+    private function resolveOrder(string $incrementId): ?OrderInterface
     {
         if ($incrementId === '') {
-            return '';
+            return null;
         }
         try {
             $criteria = $this->searchCriteriaBuilder
@@ -143,11 +146,11 @@ class Index extends AbstractStorefrontGetPage
                 ->create();
             $list = $this->orderRepository->getList($criteria);
             foreach ($list->getItems() as $order) {
-                return (string) $order->getOrderCurrencyCode();
+                return $order;
             }
         } catch (\Throwable) {
-            // Silent — block falls through to base currency.
+            // Silent — block falls back to base currency and current store.
         }
-        return '';
+        return null;
     }
 }

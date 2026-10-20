@@ -17,9 +17,6 @@ use Magento\Store\Model\ScopeInterface;
 
 class VerifyResult extends Template
 {
-    private const ARTICLE_REF = 'Art. 11a Directive 2011/83/EU';
-    private const LEGACY_ARTICLE_REF = 'Art. 9 CRD';
-
     /**
      * Constructor.
      *
@@ -100,15 +97,11 @@ class VerifyResult extends Template
     /**
      * Get article ref.
      *
-     * Receipts frozen before EU Withdrawal 1.2.0 carry "Art. 9 CRD"; the frozen text stays as it is so its hash still
-     * verifies, and the page shows the reference the receipt email states.
-     *
      * @return string
      */
     public function getArticleRef(): string
     {
-        $ref = (string) $this->getData('article_ref');
-        return $ref === self::LEGACY_ARTICLE_REF ? self::ARTICLE_REF : $ref;
+        return (string) $this->getData('article_ref');
     }
 
     /**
@@ -122,8 +115,8 @@ class VerifyResult extends Template
     }
 
     /**
-     * Formats the ReceiptDto's ISO created_at ("2026-04-24T11:03:22Z") in the store timezone and names
-     * the zone, e.g. "Apr 24, 2026, 1:03 PM (Europe/Berlin)".
+     * Formats the ReceiptDto's ISO created_at ("2026-04-24T11:03:22Z") in the timezone of the store the
+     * order was placed in and names the zone, e.g. "Apr 24, 2026, 1:03 PM (Europe/Berlin)".
      */
     public function getCreatedAtFormatted(): string
     {
@@ -136,7 +129,8 @@ class VerifyResult extends Template
         } catch (\Exception) {
             return $raw;
         }
-        $zone = (string) $this->timezone->getConfigTimezone(ScopeInterface::SCOPE_STORE);
+        $storeId = (int) $this->getData('store_id');
+        $zone = (string) $this->timezone->getConfigTimezone(ScopeInterface::SCOPE_STORE, $storeId ?: null);
         $formatted = $this->timezone->formatDateTime(
             $dt,
             \IntlDateFormatter::MEDIUM,

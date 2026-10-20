@@ -18,11 +18,11 @@ use PHPUnit\Framework\TestCase;
 
 class VerifyResultTest extends TestCase
 {
-    public function testSubmittedTimeIsShownInStoreTimezoneWithTheZoneNamed(): void
+    public function testSubmittedTimeIsShownInTheOrderStoreTimezoneWithTheZoneNamed(): void
     {
         $timezone = $this->createMock(TimezoneInterface::class);
         $timezone->method('getConfigTimezone')
-            ->with(ScopeInterface::SCOPE_STORE)
+            ->with(ScopeInterface::SCOPE_STORE, 3)
             ->willReturn('America/Los_Angeles');
         $timezone->expects($this->once())
             ->method('formatDateTime')
@@ -43,18 +43,18 @@ class VerifyResultTest extends TestCase
             $timezone,
             $this->createMock(PriceCurrencyInterface::class),
             $this->createMock(HttpContext::class),
-            ['created_at' => '2026-10-20T19:34:00Z'],
+            ['created_at' => '2026-10-20T19:34:00Z', 'store_id' => 3],
         );
 
         $this->assertSame('Oct 20, 2026, 12:34 PM (America/Los_Angeles)', $block->getCreatedAtFormatted());
     }
 
-    public function testReceiptIssuedWithTheOldReferenceShowsTheCurrentLegalBasis(): void
+    public function testReceiptIssuedWithTheOldReferenceShowsItAsFrozen(): void
     {
-        self::assertSame('Art. 11a Directive 2011/83/EU', $this->blockWith(['article_ref' => 'Art. 9 CRD'])->getArticleRef());
+        self::assertSame('Art. 9 CRD', $this->blockWith(['article_ref' => 'Art. 9 CRD'])->getArticleRef());
     }
 
-    public function testCurrentLegalBasisIsShownAsStored(): void
+    public function testNewReceiptShowsArticle11a(): void
     {
         self::assertSame(
             'Art. 11a Directive 2011/83/EU',
