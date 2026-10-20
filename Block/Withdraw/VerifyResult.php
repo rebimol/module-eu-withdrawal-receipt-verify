@@ -7,25 +7,33 @@ declare(strict_types=1);
 
 namespace MageMe\EUWithdrawalReceiptVerify\Block\Withdraw;
 
+use Magento\Customer\Model\Context as CustomerContext;
+use Magento\Framework\App\Http\Context as HttpContext;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Element\Template\Context;
+use Magento\Store\Model\ScopeInterface;
 
 class VerifyResult extends Template
 {
+    private const ARTICLE_REF = 'Art. 11a Directive 2011/83/EU';
+    private const LEGACY_ARTICLE_REF = 'Art. 9 CRD';
+
     /**
      * Constructor.
      *
      * @param Context $context
      * @param TimezoneInterface $timezone
      * @param PriceCurrencyInterface $priceCurrency
+     * @param HttpContext $httpContext
      * @param array $data
      */
     public function __construct(
         Context $context,
         private readonly TimezoneInterface $timezone,
         private readonly PriceCurrencyInterface $priceCurrency,
+        private readonly HttpContext $httpContext,
         array $data = [],
     ) {
         parent::__construct($context, $data);
@@ -92,11 +100,15 @@ class VerifyResult extends Template
     /**
      * Get article ref.
      *
+     * Receipts frozen before EU Withdrawal 1.2.0 carry "Art. 9 CRD"; the frozen text stays as it is so its hash still
+     * verifies, and the page shows the reference the receipt email states.
+     *
      * @return string
      */
     public function getArticleRef(): string
     {
-        return (string) $this->getData('article_ref');
+        $ref = (string) $this->getData('article_ref');
+        return $ref === self::LEGACY_ARTICLE_REF ? self::ARTICLE_REF : $ref;
     }
 
     /**
@@ -109,7 +121,10 @@ class VerifyResult extends Template
         return (string) $this->getData('content_hash');
     }
 
-    /** Formats the ReceiptDto's ISO created_at ("2026-04-24T11:03:22Z") in the store timezone. */
+    /**
+     * Formats the ReceiptDto's ISO created_at ("2026-04-24T11:03:22Z") in the store timezone and names
+     * the zone, e.g. "Apr 24, 2026, 1:03 PM (Europe/Berlin)".
+     */
     public function getCreatedAtFormatted(): string
     {
         $raw = (string) $this->getData('created_at');
@@ -121,11 +136,15 @@ class VerifyResult extends Template
         } catch (\Exception) {
             return $raw;
         }
-        return $this->timezone->formatDateTime(
+        $zone = (string) $this->timezone->getConfigTimezone(ScopeInterface::SCOPE_STORE);
+        $formatted = $this->timezone->formatDateTime(
             $dt,
             \IntlDateFormatter::MEDIUM,
             \IntlDateFormatter::SHORT,
+            null,
+            $zone,
         );
+        return sprintf('%s (%s)', $formatted, $zone);
     }
 
     /**
@@ -214,5 +233,26 @@ class VerifyResult extends Template
     public function getMyAccountUrl(): string
     {
         return $this->getUrl('customer/account/');
+    }
+
+    /**
+     * Whether the visitor is signed in; the page is public, so a guest gets a link back to the store
+     * instead of one to the account sign-in.
+     *
+     * @return bool
+     */
+    public function isCustomerLoggedIn(): bool
+    {
+        return (bool) $this->httpContext->getValue(CustomerContext::CONTEXT_AUTH);
+    }
+
+    /**
+     * Get continue shopping url.
+     *
+     * @return string
+     */
+    public function getContinueShoppingUrl(): string
+    {
+        return $this->getBaseUrl();
     }
 }

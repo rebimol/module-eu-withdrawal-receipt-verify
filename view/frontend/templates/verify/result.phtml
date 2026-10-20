@@ -8,7 +8,9 @@ declare(strict_types=1);
 /** @var \MageMe\EUWithdrawalReceiptVerify\Block\Withdraw\VerifyResult $block */
 /** @var \Magento\Framework\Escaper $escaper */
 
-$accountUrl = $block->getMyAccountUrl();
+$loggedIn = $block->isCustomerLoggedIn();
+$backUrl = $loggedIn ? $block->getMyAccountUrl() : $block->getContinueShoppingUrl();
+$backLabel = $loggedIn ? __('Back to my account') : __('Continue Shopping');
 $ok = $block->isOk();
 ?>
 <section class="mm-eu-w-verify" aria-labelledby="mm-eu-w-verify-title">
@@ -34,8 +36,8 @@ $ok = $block->isOk();
                 </p>
             </div>
             <div class="mm-eu-w-verify-hero-cta">
-                <a href="<?= $escaper->escapeUrl($accountUrl) ?>" class="action secondary mm-eu-w-verify-back">
-                    <?= $escaper->escapeHtml(__('Back to my account')) ?>
+                <a href="<?= $escaper->escapeUrl($backUrl) ?>" class="action secondary mm-eu-w-verify-back">
+                    <?= $escaper->escapeHtml($backLabel) ?>
                 </a>
             </div>
         </div>
@@ -92,7 +94,12 @@ $ok = $block->isOk();
                     <?php foreach ($items as $item): ?>
                         <li class="mm-eu-w-verify-item">
                             <span class="mm-eu-w-verify-item-meta">
-                                <strong><?= $escaper->escapeHtml(__('SKU %1', (string) ($item['sku'] ?? ''))) ?></strong>
+                                <?php if ((string) ($item['name'] ?? '') !== ''): ?>
+                                    <strong><?= $escaper->escapeHtml((string) $item['name']) ?></strong>
+                                    <span class="mm-eu-w-verify-item-sku"><?= $escaper->escapeHtml(__('SKU %1', (string) ($item['sku'] ?? ''))) ?></span>
+                                <?php else: ?>
+                                    <strong><?= $escaper->escapeHtml(__('SKU %1', (string) ($item['sku'] ?? ''))) ?></strong>
+                                <?php endif; ?>
                             </span>
                             <span class="mm-eu-w-verify-item-qty">
                                 <?= $escaper->escapeHtml(__('Qty %1', (int) ($item['qty'] ?? 0))) ?>
@@ -183,8 +190,8 @@ $ok = $block->isOk();
                 </p>
             </div>
             <div class="mm-eu-w-verify-hero-cta">
-                <a href="<?= $escaper->escapeUrl($accountUrl) ?>" class="action secondary mm-eu-w-verify-back">
-                    <?= $escaper->escapeHtml(__('Back to my account')) ?>
+                <a href="<?= $escaper->escapeUrl($backUrl) ?>" class="action secondary mm-eu-w-verify-back">
+                    <?= $escaper->escapeHtml($backLabel) ?>
                 </a>
             </div>
         </div>
