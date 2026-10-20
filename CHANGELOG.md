@@ -1,5 +1,6 @@
 ## 1.0.4
 
+- Fix: The verification page no longer says the receipt is cryptographically signed; it says the receipt matches its SHA-256 fingerprint, which is what the check does.
 - Fix: The receipt verification page shows the submission time in the time zone of the store the order was placed in and names the zone; it used to show UTC without saying so.
 - Fix: Returned items on the verification page show the product name next to the SKU, for receipts issued with EU Withdrawal 1.2.0 or later.
 - Fix: Visitors who are not signed in get a "Continue Shopping" link on the verification page instead of "Back to my account".

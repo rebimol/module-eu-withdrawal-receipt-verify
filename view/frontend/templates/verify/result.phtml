@@ -32,7 +32,7 @@ $ok = $block->isOk();
             <div class="mm-eu-w-verify-hero-body">
                 <h2 class="mm-eu-w-verify-hero-title"><?= $escaper->escapeHtml(__('Receipt verified')) ?></h2>
                 <p class="mm-eu-w-verify-hero-text">
-                    <?= $escaper->escapeHtml(__('This receipt is cryptographically signed and has not been modified since it was issued by the merchant.')) ?>
+                    <?= $escaper->escapeHtml(__('This receipt matches its SHA-256 fingerprint, which shows it has not been changed since the merchant issued it.')) ?>
                 </p>
             </div>
             <div class="mm-eu-w-verify-hero-cta">
