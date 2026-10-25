@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace MageMe\EUWithdrawalReceiptVerify\Controller\Verify;
 
 use MageMe\EUWithdrawal\Api\Receipt\ContentHasherInterface;
+use MageMe\EUWithdrawal\Api\RequestRepositoryInterface;
 use MageMe\EUWithdrawal\Model\Receipt\ReceiptBuilder;
 use MageMe\EUWithdrawal\Model\Security\RateLimiter;
 use MageMe\EUWithdrawal\Model\Security\ResponseTimer;
@@ -18,7 +19,6 @@ use Magento\Framework\View\Result\Page;
 use Magento\Framework\View\Result\PageFactory;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
-use Magento\Framework\Api\SearchCriteriaBuilder;
 
 class Index extends AbstractStorefrontGetPage
 {
@@ -33,7 +33,7 @@ class Index extends AbstractStorefrontGetPage
      * @param RateLimiter $rateLimiter
      * @param ResponseTimer $timer
      * @param OrderRepositoryInterface $orderRepository
-     * @param SearchCriteriaBuilder $searchCriteriaBuilder
+     * @param RequestRepositoryInterface $requestRepository
      */
     public function __construct(
         Context $context,
@@ -44,7 +44,7 @@ class Index extends AbstractStorefrontGetPage
         private readonly RateLimiter $rateLimiter,
         private readonly ResponseTimer $timer,
         private readonly OrderRepositoryInterface $orderRepository,
-        private readonly SearchCriteriaBuilder $searchCriteriaBuilder,
+        private readonly RequestRepositoryInterface $requestRepository,
     ) {
         parent::__construct($context);
     }
@@ -73,7 +73,7 @@ class Index extends AbstractStorefrontGetPage
                     $computed = $this->hasher->hash($dto);
                     if (hash_equals($computed, $rawHash)) {
                         $ok = true;
-                        $order = $this->resolveOrder((string) ($dto->order['increment_id'] ?? ''));
+                        $order = $this->resolveOrder($dto->requestId);
                         $payload = [
                             'request_id'     => $dto->requestId,
                             'created_at'     => (string) ($dto->receipt['created_at'] ?? ''),
@@ -124,7 +124,7 @@ class Index extends AbstractStorefrontGetPage
     }
 
     /**
-     * Look up the order by increment_id. Verify-page amount formatting must use
+     * Look up the request's own order. Verify-page amount formatting must use
      * the currency the consumer was actually charged in
      * (sales_order.order_currency_code), not the store base currency — the
      * receipt is a customer-facing artefact, and a € invoice displayed as $
@@ -134,20 +134,10 @@ class Index extends AbstractStorefrontGetPage
      * Returns null on any lookup failure; the block then uses the store's base
      * currency and the current store's timezone.
      */
-    private function resolveOrder(string $incrementId): ?OrderInterface
+    private function resolveOrder(int $requestId): ?OrderInterface
     {
-        if ($incrementId === '') {
-            return null;
-        }
         try {
-            $criteria = $this->searchCriteriaBuilder
-                ->addFilter('increment_id', $incrementId)
-                ->setPageSize(1)
-                ->create();
-            $list = $this->orderRepository->getList($criteria);
-            foreach ($list->getItems() as $order) {
-                return $order;
-            }
+            return $this->orderRepository->get((int) $this->requestRepository->get($requestId)->getOrderId());
         } catch (\Throwable) {
             // Silent — block falls back to base currency and current store.
         }

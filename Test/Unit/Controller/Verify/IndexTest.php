@@ -7,20 +7,19 @@ declare(strict_types=1);
 
 namespace MageMe\EUWithdrawalReceiptVerify\Test\Unit\Controller\Verify;
 
+use MageMe\EUWithdrawal\Api\Data\RequestInterface;
+use MageMe\EUWithdrawal\Api\RequestRepositoryInterface;
 use MageMe\EUWithdrawalReceiptVerify\Controller\Verify\Index;
 use MageMe\EUWithdrawalReceiptVerify\Model\Receipt\ContentHasher;
 use MageMe\EUWithdrawal\Model\Receipt\ReceiptBuilder;
 use MageMe\EUWithdrawal\Model\Receipt\ReceiptDto;
 use MageMe\EUWithdrawal\Model\Security\RateLimiter;
 use MageMe\EUWithdrawal\Model\Security\ResponseTimer;
-use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\Request\Http as HttpRequest;
 use Magento\Framework\View\Result\Page;
 use Magento\Framework\View\Result\PageFactory;
-use Magento\Framework\Api\SearchCriteria;
 use Magento\Sales\Api\Data\OrderInterface;
-use Magento\Sales\Api\Data\OrderSearchResultInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
 use PHPUnit\Framework\TestCase;
 
@@ -38,7 +37,7 @@ class IndexTest extends TestCase
             $deps->rateLimiter,
             $deps->timer,
             $deps->orderRepo,
-            $deps->scb,
+            $deps->requestRepo,
         ))->execute();
         $this->assertSame($deps->page, $page);
         $this->assertFalse((bool) $deps->block->getData('ok'));
@@ -56,7 +55,7 @@ class IndexTest extends TestCase
             $deps->rateLimiter,
             $deps->timer,
             $deps->orderRepo,
-            $deps->scb,
+            $deps->requestRepo,
         ))->execute();
         $this->assertFalse((bool) $deps->block->getData('ok'));
     }
@@ -73,7 +72,7 @@ class IndexTest extends TestCase
             $deps->rateLimiter,
             $deps->timer,
             $deps->orderRepo,
-            $deps->scb,
+            $deps->requestRepo,
         ))->execute();
         $this->assertFalse((bool) $deps->block->getData('ok'));
     }
@@ -94,7 +93,7 @@ class IndexTest extends TestCase
             $deps->rateLimiter,
             $deps->timer,
             $deps->orderRepo,
-            $deps->scb,
+            $deps->requestRepo,
         ))->execute();
         $this->assertTrue((bool) $deps->block->getData('ok'));
     }
@@ -108,12 +107,11 @@ class IndexTest extends TestCase
         $order = $this->createMock(OrderInterface::class);
         $order->method('getOrderCurrencyCode')->willReturn('EUR');
         $order->method('getStoreId')->willReturn(3);
-        $list = $this->createMock(OrderSearchResultInterface::class);
-        $list->method('getItems')->willReturn([$order]);
-        $deps->orderRepo->method('getList')->willReturn($list);
-        $deps->scb->method('addFilter')->willReturnSelf();
-        $deps->scb->method('setPageSize')->willReturnSelf();
-        $deps->scb->method('create')->willReturn($this->createMock(SearchCriteria::class));
+        $request = $this->createMock(RequestInterface::class);
+        $request->method('getOrderId')->willReturn(7);
+        $deps->requestRepo->method('get')->with(42)->willReturn($request);
+        $deps->orderRepo->method('get')->with(7)->willReturn($order);
+        $deps->orderRepo->expects(self::never())->method('getList');
 
         (new Index(
             $deps->context,
@@ -124,7 +122,7 @@ class IndexTest extends TestCase
             $deps->rateLimiter,
             $deps->timer,
             $deps->orderRepo,
-            $deps->scb,
+            $deps->requestRepo,
         ))->execute();
         $this->assertSame('EUR', $deps->block->getData('currency_code'));
         $this->assertSame(3, $deps->block->getData('store_id'));
@@ -144,7 +142,7 @@ class IndexTest extends TestCase
             $deps->rateLimiter,
             $deps->timer,
             $deps->orderRepo,
-            $deps->scb,
+            $deps->requestRepo,
         ))->execute();
         $this->assertFalse((bool) $deps->block->getData('ok'));
     }
@@ -190,7 +188,7 @@ class IndexTest extends TestCase
         $d->rateLimiter->method('allow')->willReturn($allowRate);
         $d->timer = $this->createMock(ResponseTimer::class);
         $d->orderRepo = $this->createMock(OrderRepositoryInterface::class);
-        $d->scb = $this->createMock(SearchCriteriaBuilder::class);
+        $d->requestRepo = $this->createMock(RequestRepositoryInterface::class);
         return $d;
     }
 
