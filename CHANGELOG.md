@@ -1,12 +1,10 @@
 ## 1.0.4
 
-- Fix: The note under the hash on the verification page now says what the check does: the store keeps the hash with the receipt and compares it with the receipt's content. It used to say anyone with the email could recompute it.
-- Fix: The verification page no longer says the receipt is cryptographically signed; it says the receipt matches its SHA-256 fingerprint, which is what the check does.
-- Fix: The receipt verification page shows the submission time in the time zone of the store the order was placed in and names the zone; it used to show UTC without saying so.
-- Fix: The verification page takes the currency and time zone from the order the withdrawal belongs to. A store whose store views share order numbers could show another order's currency and time zone.
-- Fix: Returned items on the verification page show the product name next to the SKU, for receipts issued with EU Withdrawal 1.2.0 or later.
-- Fix: Visitors who are not signed in get a "Continue Shopping" link on the verification page instead of "Back to my account".
-- Fix: In Bulgarian and German, the "Verify this receipt" button in the receipt email now uses the same word for the receipt as the rest of the email.
+- Fix: The verification page explains the hash check correctly and no longer calls the receipt cryptographically signed.
+- Fix: The page shows the submission time in the store's time zone and the currency of the right order.
+- Fix: Returned items show the product name next to the SKU (receipts from EU Withdrawal 1.2.0).
+- Fix: Guests get a "Continue Shopping" link instead of "Back to my account".
+- Fix: The "Verify this receipt" button in Bulgarian and German uses the same word as the email.
 
 ## 1.0.3
 
